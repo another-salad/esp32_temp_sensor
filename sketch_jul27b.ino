@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <Adafruit_PCT2075.h>
 #include <WiFi.h>
 #include <ArduinoJson.h>
 #include <WebServer.h>
@@ -26,7 +27,7 @@ void ConnectToWiFi() {
     }
   }
 
-  Serial.print(F("Connected. My IP address is: "));
+  Serial.print(F("Connected. IP address is: "));
   Serial.println(WiFi.localIP());
 }
 
