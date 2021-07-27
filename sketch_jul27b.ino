@@ -8,6 +8,7 @@
 const char* ssid = "";
 const char* password = "";
 
+Adafruit_PCT2075 PCT2075;
 WebServer server(80);
 
 void ConnectToWiFi() {
@@ -32,7 +33,13 @@ void ConnectToWiFi() {
 }
 
 void setup() {
+  PCT2075 = Adafruit_PCT2075();
   Serial.begin(115200);
+  while (!Serial) { delay(1); }
+  if (!PCT2075.begin()) {
+    Serial.println("Couldn't find PCT2075 chip");
+    while (1);
+  }
   ConnectToWiFi();
   server.on("/", returnTemp);
   server.begin();
@@ -43,5 +50,5 @@ void loop() {
 }
 
 void returnTemp() {
-  server.send(200, "text/html", "<html><h1>hello</h1><html>");
+  server.send(200, "text/json", "{\"temp\" :\""+String(PCT2075.getTemperature())+"\"}");
 }
