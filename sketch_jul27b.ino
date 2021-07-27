@@ -7,6 +7,8 @@
 /* Put your SSID & Password */
 const char* ssid = "";
 const char* password = "";
+/* Location of sensor (String) */
+const char* location = "spare_room";
 
 Adafruit_PCT2075 PCT2075;
 WebServer server(80);
@@ -50,5 +52,14 @@ void loop() {
 }
 
 void returnTemp() {
-  server.send(200, "text/json", "{\"temp\" :\""+String(PCT2075.getTemperature())+"\"}");
+  // create and serialise the return JSON
+  DynamicJsonDocument doc(256);
+  doc["error"] = 0;
+  doc["loc"] = location;
+  doc["temp"] = PCT2075.getTemperature();
+  doc.shrinkToFit();
+  String json;
+  serializeJson(doc, json);
+  // return it
+  server.send(200, "text/json", json);
 }
