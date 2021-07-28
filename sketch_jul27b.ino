@@ -58,7 +58,6 @@ void loop() {
 }
 
 void returnTemp() {
-  doc["error"] = 0;
   doc["temp"] = PCT2075.getTemperature();
   String json;
   serializeJson(doc, json);
