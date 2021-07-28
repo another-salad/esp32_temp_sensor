@@ -21,11 +21,13 @@ void ConnectToWiFi() {
 
   uint8_t i = 0;
   while (WiFi.status() != WL_CONNECTED) {
-    Serial.print('.');
-    delay(500);
     if ((++i % 16) == 0) {
       Serial.println(F(" still trying to connect"));
     }
+    else {
+      Serial.print('.');
+    }
+    delay(500);
   }
 
   Serial.print(F("Connected. IP address is: "));
