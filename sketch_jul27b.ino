@@ -3,20 +3,16 @@
 #include <WiFi.h>
 #include <ArduinoJson.h>
 #include <WebServer.h>
+#include <WifiConfig.h>
 
-/* Put your SSID & Password */
-const char* ssid = "";
-const char* password = "";
-/* Location of sensor (String) */
-const char* location = "spare_room";
 
 Adafruit_PCT2075 PCT2075;
 WebServer server(80);
 
 void ConnectToWiFi() {
   WiFi.mode(WIFI_STA);
-  WiFi.begin(ssid, password);
-  Serial.print("Connecting to "); Serial.println(ssid);
+  WiFi.begin(SSID, WiFiPassword);
+  Serial.print("Connecting to "); Serial.println(SSID);
 
   uint8_t i = 0;
   while (WiFi.status() != WL_CONNECTED)
@@ -55,7 +51,7 @@ void returnTemp() {
   // create and serialise the return JSON
   DynamicJsonDocument doc(256);
   doc["error"] = 0;
-  doc["loc"] = location;
+  doc["loc"] = Location;
   doc["temp"] = PCT2075.getTemperature();
   doc.shrinkToFit();
   String json;
