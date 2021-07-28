@@ -16,13 +16,14 @@ DynamicJsonDocument doc(256);
 void ConnectToWiFi() {
   WiFi.mode(WIFI_STA);
   WiFi.begin(SSID, WiFiPassword);
-  Serial.print("Connecting to "); Serial.println(SSID);
+  Serial.print("Connecting to ");
+  Serial.println(SSID);
 
   uint8_t i = 0;
-  while (WiFi.status() != WL_CONNECTED){
+  while (WiFi.status() != WL_CONNECTED) {
     Serial.print('.');
     delay(500);
-    if ((++i % 16) == 0){
+    if ((++i % 16) == 0) {
       Serial.println(F(" still trying to connect"));
     }
   }
@@ -43,7 +44,9 @@ void setup() {
   // init temp sensor, serial and connect to wifi
   PCT2075 = Adafruit_PCT2075();
   Serial.begin(115200);
-  while (!Serial) { delay(1); }
+  while (!Serial) {
+    delay(1);
+  }
   if (!PCT2075.begin()) {
     Serial.println("Couldn't find PCT2075 chip");
     while (1);
