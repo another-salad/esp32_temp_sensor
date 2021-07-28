@@ -9,6 +9,10 @@
 Adafruit_PCT2075 PCT2075;
 WebServer server(80);
 
+// create the return JSON document
+DynamicJsonDocument doc(256);
+
+
 void ConnectToWiFi() {
   WiFi.mode(WIFI_STA);
   WiFi.begin(SSID, WiFiPassword);
@@ -31,6 +35,7 @@ void ConnectToWiFi() {
 }
 
 void setup() {
+  // init temp sensor, serial and connect to wifi
   PCT2075 = Adafruit_PCT2075();
   Serial.begin(115200);
   while (!Serial) { delay(1); }
@@ -39,6 +44,14 @@ void setup() {
     while (1);
   }
   ConnectToWiFi();
+
+  // set default values to JSON doc
+  doc["loc"] = Location;
+  doc["error"] = 0;
+  doc["temp"] = 99.9999;
+  doc.shrinkToFit();
+
+  // setup and start webserver
   server.on("/", returnTemp);
   server.begin();
 }
@@ -48,12 +61,8 @@ void loop() {
 }
 
 void returnTemp() {
-  // create and serialise the return JSON
-  DynamicJsonDocument doc(256);
   doc["error"] = 0;
-  doc["loc"] = Location;
   doc["temp"] = PCT2075.getTemperature();
-  doc.shrinkToFit();
   String json;
   serializeJson(doc, json);
   // return it
