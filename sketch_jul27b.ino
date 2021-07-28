@@ -31,6 +31,14 @@ void ConnectToWiFi() {
   Serial.println(WiFi.localIP());
 }
 
+void returnTemp() {
+  doc["temp"] = PCT2075.getTemperature();
+  String json;
+  serializeJson(doc, json);
+  // return it
+  server.send(200, "text/json", json);
+}
+
 void setup() {
   // init temp sensor, serial and connect to wifi
   PCT2075 = Adafruit_PCT2075();
@@ -55,12 +63,4 @@ void setup() {
 
 void loop() {
   server.handleClient();
-}
-
-void returnTemp() {
-  doc["temp"] = PCT2075.getTemperature();
-  String json;
-  serializeJson(doc, json);
-  // return it
-  server.send(200, "text/json", json);
 }
